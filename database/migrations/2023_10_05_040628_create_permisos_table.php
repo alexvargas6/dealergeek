@@ -16,6 +16,7 @@ class CreatePermisosTable extends Migration
         Schema::create('permisos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_permiso');
+            $table->string('clave_permiso')->unique(); // Clave permiso única
             $table->enum('estatus', ['A', 'E']);
             $table->timestamps();
         });
@@ -23,6 +24,7 @@ class CreatePermisosTable extends Migration
         // Insertar un registro inicial
         DB::table('permisos')->insert([
             'nombre_permiso' => 'administrador',
+            'clave_permiso' => 'adm', // Clave de permiso "adm"
             'estatus' => 'A',
             'created_at' => now(),
         ]);

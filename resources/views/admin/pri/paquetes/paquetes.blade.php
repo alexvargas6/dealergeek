@@ -103,7 +103,13 @@
 <script src="{{asset('assets/js/init/datatables-init.js')}}"></script>
 
 
-<script type="text/javascript">
+    <script type="text/javascript" src="{{asset('assets/js/select/municipios.js')}}"></script>
+    <script type="text/javascript" src="{{asset('assets/js/select/select_estados.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/3.2.0/js/materialize.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $('select').material_select();
+        });
     $(document).ready(function() {
         $('#bootstrap-data-table-export').DataTable();
     });

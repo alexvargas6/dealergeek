@@ -22,6 +22,14 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+        // Crear el usuario administrador
+        DB::table('users')->insert([
+            'name' => 'administrador',
+            'email' => 'admin@admin.com',
+            'password' => Hash::make('Qwerty123'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     /**

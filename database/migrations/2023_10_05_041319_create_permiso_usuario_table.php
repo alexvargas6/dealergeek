@@ -32,6 +32,15 @@ class CreatePermisoUsuarioTable extends Migration
                 ->on('users')
                 ->onDelete('cascade');
         });
+
+        // Crear el registro relacionando usuario con permiso
+        DB::table('permiso_usuario')->insert([
+            'permiso_id' => 1, // ID del permiso 'administrador'
+            'user_id' => 1, // ID del usuario administrador
+            'estatus' => 'A',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     /**

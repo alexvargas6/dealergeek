@@ -16,11 +16,6 @@ class adminController extends Controller
         return view('admin.pri.principal');
     }
 
-    public function moduloPaquetes()
-    {
-        return view('admin.pri.paquetes.paquetes');
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -28,7 +23,6 @@ class adminController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -39,7 +33,6 @@ class adminController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**

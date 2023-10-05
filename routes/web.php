@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\indexControl;
 use App\Http\Controllers\seguimientoController;
 use App\Http\Controllers\adminController;
+use App\Http\Controllers\paquetesController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,9 +24,28 @@ Route::group(['prefix' => 'seguimiento'], function () {
     );
 });
 Route::group(['prefix' => 'admin'], function () {
-    Route::get('/paquetes', [adminController::class, 'moduloPaquetes'])->name(
+    Route::get('/paquetes', [paquetesController::class, 'index'])->name(
         'showPaquetes'
     );
+    Route::get('paquetes/create', [paquetesController::class, 'create'])->name(
+        'paquetes.create'
+    );
+    Route::post('paquetes', [paquetesController::class, 'store'])->name(
+        'paquetes.store'
+    );
+    Route::get('paquetes/{id}', [paquetesController::class, 'show'])->name(
+        'paquetes.show'
+    );
+    Route::get('paquetes/{id}/edit', [paquetesController::class, 'edit'])->name(
+        'paquetes.edit'
+    );
+    Route::put('paquetes/{id}', [paquetesController::class, 'update'])->name(
+        'paquetes.update'
+    );
+    Route::delete('paquetes/{id}', [
+        paquetesController::class,
+        'destroy',
+    ])->name('paquetes.destroy');
 });
 
 Auth::routes();
