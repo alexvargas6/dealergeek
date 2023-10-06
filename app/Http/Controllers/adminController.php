@@ -16,6 +16,11 @@ class adminController extends Controller
         return view('admin.pri.principal');
     }
 
+    public function panelAdm()
+    {
+        return view('admin.pri.panelAdmin.principal');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

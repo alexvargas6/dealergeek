@@ -36,7 +36,7 @@
         <div class="row">
 
             <div class="abs-center">
-                <h1>Hola, Esta es mi prueba de desarrollo, utiliza el Menú lateral para visitar los modulos</h1>
+                <h1>página principal</h1>
             </div>
 
         </div>

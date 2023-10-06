@@ -11,7 +11,7 @@
 
             <div class="user-area dropdown float-right">
                 <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="user-avatar rounded-circle" src="{{asset('images/robot.png')}}" alt="User Avatar">
+                    {{ Auth::user()->name }}
                 </a>
             </div>
         </div>

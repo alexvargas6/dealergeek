@@ -62,7 +62,7 @@
                                 <ul class="navbar-nav">
                                     <li class="nav-item"><a href="#" class="nav-link">{{ Auth::user()->name }}</a>
                                     </li>
-                                    <li class="nav-item"><a href="#" class="nav-link">Panel de administrador</a></li>
+                                    <li class="nav-item"><a href="{{route('principalAdmin')}}" class="nav-link">Panel de administrador</a></li>
                                     <li class="nav-item"> <a class="nav-link btn-danger" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                   document.getElementById('logout-form').submit();">

@@ -16,6 +16,11 @@ class indexControl extends Controller
         return view('componente.busqueda');
     }
 
+    public function administrador()
+    {
+        return view('admin.pri.principal');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

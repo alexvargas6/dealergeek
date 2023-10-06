@@ -5,10 +5,13 @@
 
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="{{ route('showPaquetes') }}"><i class="menu-icon fa fa-user"></i>Paquetes</a>
+                    <a href="{{ route('showPaquetes') }}"><i class="menu-icon fa fa-calendar"></i>Paquetes</a>
                 </li>
-               
+                <li>
+                    <a href="{{ route('admin.panel') }}"><i class="menu-icon fa fa-user"></i>Panel del administrador</a>
+                </li>
             </ul>
+         
         </div>
     </nav>
 </aside>
