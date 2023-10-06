@@ -27,6 +27,24 @@
                             <div class="col col-md-3"><label for="altura" class="form-control-label">Altura (cm)</label></div>
                             <div class="col-12 col-md-9"><input type="number" step="0.01" min="0" name="altura_cm" placeholder="Altura (cm)" class="form-control"></div>
                         </div>
+                        
+
+                        <div class="row form-group">
+                            <input type="email" id="correo_recibe" name="correo_recibe" class="form-control" placeholder="Correo electrónico de quien recibe">
+                          
+                          </div>
+                          
+                          <div class="row form-group">
+                            <input type="text" id="nombre_recibe" name="nombre_recibe" class="form-control" placeholder="Nombre de quien recibe">
+                          
+                          </div>
+                          
+                          <div class="row form-group">
+                            <textarea id="domicilio_recibe" name="domicilio_recibe" class="form-control" placeholder="Domicilio de quien recibe"></textarea>
+                            
+                          </div>
+
+
                         <div class="row form-group">
                         @include('componente.selectLocalizacion')
                         </div>

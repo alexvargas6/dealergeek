@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\models\paquete;
+use App\models\Evento;
+use App\models\EventoPredeterminado;
 use Illuminate\Http\Request;
 
 class seguimientoController extends Controller
@@ -34,7 +36,45 @@ class seguimientoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $eventosPredeterminados = [1, 2, 3, 4];
+        if ($request->id === null) {
+            return redirect()
+                ->back()
+                ->with('ERROR', 'No se encontró la clave de rastreo');
+        }
+
+        $paquete = Paquete::where('clave_rastreo', $request->id)->first();
+        if ($paquete == null) {
+            return redirect()
+                ->back()
+                ->with('ERROR', 'No se encontró la clave de rastreo');
+        }
+
+        $eventosPred = EventoPredeterminado::whereIn(
+            'id',
+            $eventosPredeterminados
+        )->get();
+        if ($eventosPred->isEmpty()) {
+            return redirect()
+                ->back()
+                ->with('ERROR', 'No se encontraron eventos predeterminados');
+        }
+
+        $evento = Evento::where('idpaquete', $paquete->id)
+            ->orderBy('unixtime', 'desc')
+            ->get();
+
+        if ($evento == null) {
+            return redirect()
+                ->back()
+                ->with('ERROR', 'No se encontraron eventos para este paquete');
+        }
+
+        return view('componente.seguimiento', [
+            'paquete' => $paquete,
+            'evento' => $evento,
+            'eventosPred' => $eventosPred,
+        ]);
     }
 
     /**
@@ -45,7 +85,11 @@ class seguimientoController extends Controller
      */
     public function show($id)
     {
-        //
+        if ($id === null) {
+            return redirect()->route('principal'); // Redirecciona a la ruta con nombre "principal"
+        }
+        $paquete = Paquete::where('clave_rastreo', $id)->first();
+        return view('componente.seguimiento', ['paquete' => $paquete]);
     }
 
     /**

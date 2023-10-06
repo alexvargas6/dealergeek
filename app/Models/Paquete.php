@@ -15,5 +15,11 @@ class Paquete extends Model
         'ancho_cm',
         'altura_cm',
         'estatus',
+        'correo_recibe',
     ];
+
+    public function eventos()
+    {
+        return $this->hasMany(Evento::class, 'idpaquete');
+    }
 }

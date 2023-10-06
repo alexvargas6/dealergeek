@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\models\paquete;
+use App\models\Evento;
+use App\models\EventoPredeterminado;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class paquetesController extends Controller
@@ -15,7 +18,9 @@ class paquetesController extends Controller
      */
     public function index()
     {
-        return view('admin.pri.paquetes.paquetes');
+        $productos = paquete::all();
+        $responsev = ['producto' => $productos];
+        return view('admin.pri.paquetes.paquetes', $responsev);
     }
 
     /**
@@ -42,6 +47,9 @@ class paquetesController extends Controller
             'largo_cm' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'ancho_cm' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'altura_cm' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'correo_recibe' => 'required|email',
+            'nombre_recibe' => 'required|max:255',
+            'domicilio_recibe' => 'required|max:255',
         ];
 
         $messages = [
@@ -60,6 +68,17 @@ class paquetesController extends Controller
                 'EL ANCHO DEBE SER UN VALOR NUMÉRICO CON MÁXIMO 2 DECIMALES',
             'altura_cm.regex' =>
                 'LA ALTURA DEBE SER UN VALOR NUMÉRICO CON MÁXIMO 2 DECIMALES',
+            'correo_recibe.required' =>
+                'SE REQUIERE EL CORREO ELECTRÓNICO DEL DESTINATARIO',
+            'correo_recibe.email' => 'EL CORREO ELECTRÓNICO DEBE SER VÁLIDO',
+            'nombre_recibe.required' =>
+                'SE REQUIERE EL NOMBRE DEL DESTINATARIO',
+            'nombre_recibe.max' =>
+                'EL NOMBRE DEL DESTINATARIO EXCEDE EL LÍMITE DE CARACTERES',
+            'domicilio_recibe.required' =>
+                'SE REQUIERE EL DOMICILIO DEL DESTINATARIO',
+            'domicilio_recibe.max' =>
+                'EL DOMICILIO DEL DESTINATARIO EXCEDE EL LÍMITE DE CARACTERES',
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -71,6 +90,8 @@ class paquetesController extends Controller
                 ->with('ERROR', $errors);
         }
         try {
+            DB::beginTransaction();
+
             $clave_rastreo = $this->generadorClaves($request->descripcion);
             $paq = new paquete();
             $paq->descripcion = $request->descripcion;
@@ -79,17 +100,41 @@ class paquetesController extends Controller
             $paq->ancho_cm = $request->ancho_cm;
             $paq->altura_cm = $request->altura_cm;
             $paq->estatus = 'A';
+            // Completa la información para la columna "ciudad"
+            $paq->ciudad = $request->MunSal . ',' . $request->estSal;
+
+            // Completa la información para las nuevas columnas
+            $paq->correo_recibe = $request->correo_recibe;
+            $paq->nombre_recibe = $request->nombre_recibe;
+            $paq->domicilio_recibe = $request->domicilio_recibe;
             $paq->save();
 
             $paqueteID = $paq->id;
+
+            // Crear un nuevo evento asociado al paquete
+            $evento = new Evento();
+            $evento->idpaquete = $paqueteID;
+            $evento->numero_evento = 1; // Por defecto 1
+            $evento->unixtime = time(); // Tiempo actual UNIX
+            $evento->descripcion_evento = EventoPredeterminado::find(
+                1
+            )->nombre_evento; // Obtener la descripción del evento con ID 1
+            // Si es posible, obtener la localización desde la petición
+            $evento->localizacion_evento = $request->server('REMOTE_ADDR');
+            $evento->save();
+
+            // Confirmar la transacción
+            DB::commit();
+            return redirect()
+                ->back()
+                ->with('success', 'Se creo el registro exitosamente');
         } catch (\Exception $e) {
+            // Si algo falla, hacer un rollback de la transacción
+            DB::rollback();
             return redirect()
                 ->back()
                 ->with('ERROR', $e);
         }
-        return redirect()
-            ->back()
-            ->with('success', 'Se creo el registro exitosamente');
     }
 
     /**
@@ -139,11 +184,9 @@ class paquetesController extends Controller
 
     private function generadorClaves($inputString)
     {
-        // Eliminar espacios en blanco y obtener los primeros 3 caracteres
-        $primerosTresCaracteres = substr(
-            str_replace(' ', '', $inputString),
-            0,
-            3
+        // Eliminar espacios en blanco y obtener los primeros 3 caracteres en mayúsculas
+        $primerosTresCaracteres = strtoupper(
+            substr(str_replace(' ', '', $inputString), 0, 3)
         );
 
         // Obtener el unixtime actual

@@ -66,19 +66,31 @@
                         <table id="bootstrap-data-table" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                   
+                                    <th>Clave de rastreo</th>
+                                    <th>Descripción</th>
+                                    <th>Estado</th>
+                                    <th>Mas información y estado</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                
+                                @foreach($producto as $pro)
                                 @include('admin.pri.paquetes.modalMod')
                                 <tr>
-                                    <td>111</td>
-                                    
-                                    
+                                    <td>{{$pro->clave_rastreo}}</td>
+                                    <td>{{$pro->descripcion}}</td>
+                                    <td>
+                                        @if($pro->estatus === 'A')
+                                            ACTIVO
+                                        @elseif($pro->estatus === 'F')
+                                            FINALIZADO
+                                        @else
+                                            Otro estado
+                                        @endif
+                                    </td>
+                                    <td> <button type="button" data-toggle="modal" data-target="#modal-{{$pro->id}}" class="btn btn-warning btn-lg">Modificar</button>
+                                    </td>
                                 </tr>
-                            
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -114,3 +126,13 @@
         $('#bootstrap-data-table-export').DataTable();
     });
 </script>
+<script>
+    function hideFirstModalAndShowSecond(id) {
+        // Cierra el primer modal
+        $('#modal-' + id).modal('hide');
+        
+        // Muestra el segundo modal
+        $('#modalEstados-' + id).modal('show');
+    }
+</script>
+@endsection

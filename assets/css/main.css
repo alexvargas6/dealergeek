@@ -811,18 +811,17 @@ legend {
 
 .s005 {
   min-height: 100vh;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: center;
-      justify-content: center;
-  -ms-flex-align: center;
-      align-items: center;
+  justify-content: center;
+  align-items: center;
   font-family: 'Poppins', sans-serif;
-  background: rgba(245, 40, 145, 0.05); /* Fondo blanco ligeramente oscurecido */
+  background: url('https://logisber.com/contenido/subidas/2019/11/empresas-transporte-internacional.png');
   background-size: cover;
   background-position: center center;
   padding: 15px;
+  position: relative; /* Agrega posición relativa para contener los mensajes */
 }
+
 
 .s005 form {
   width: 100%;
@@ -831,7 +830,7 @@ legend {
 
 .s005 form legend {
   font-size: 36px;
-  color: #50c6e0;
+  color: rgb( 238, 84, 53);
   font-weight: 800;
   text-align: center;
   margin-bottom: 50px;

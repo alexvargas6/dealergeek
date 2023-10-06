@@ -5,7 +5,7 @@
 
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="#"><i class="menu-icon fa fa-user"></i>Sección de clientes</a>
+                    <a href="{{ route('showPaquetes') }}"><i class="menu-icon fa fa-user"></i>Paquetes</a>
                 </li>
                
             </ul>

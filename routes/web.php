@@ -19,8 +19,11 @@ use App\Http\Controllers\paquetesController;
 Route::get('/', [indexControl::class, 'index'])->name('principal');
 
 Route::group(['prefix' => 'seguimiento'], function () {
-    Route::get('/ver', [seguimientoController::class, 'index'])->name(
+    Route::get('/ver/{id}', [seguimientoController::class, 'show'])->name(
         'showSeguimiento'
+    );
+    Route::post('/seguirClave', [seguimientoController::class, 'store'])->name(
+        'seguimientoPost'
     );
 });
 Route::group(['prefix' => 'admin'], function () {
