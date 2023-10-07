@@ -16,19 +16,19 @@
                                     @csrf
                                     <div class="form-group">
                                         <label for="nombre_modulo">Nombre del Módulo</label>
-                                        <input type="text" class="form-control" id="nombre_modulo" name="module_name" placeholder="Nombre del módulo">
+                                        <input type="text" class="form-control" id="nombre_modulo" name="module_name" placeholder="Nombre del módulo" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="nombre_ruta">Nombre de la Ruta</label>
-                                        <input type="text" class="form-control" id="nombre_ruta" name="module_route" placeholder="Nombre de la ruta">
+                                        <input type="text" class="form-control" id="nombre_ruta" name="module_route" placeholder="Nombre de la ruta" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="nombre_permiso">Nombre del Permiso</label>
-                                        <input type="text" class="form-control" id="nombre_permiso" name="nombre_permiso" placeholder="Nombre del permiso">
+                                        <input type="text" class="form-control" id="nombre_permiso" name="nombre_permiso" placeholder="Nombre del permiso" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="clave_permiso">Clave del Permiso</label>
-                                        <input type="text" class="form-control" id="clave_permiso" name="clave_permiso" placeholder="Clave del permiso">
+                                        <input type="text" class="form-control" id="clave_permiso" name="clave_permiso" placeholder="Clave del permiso" required>
                                     </div>
                                     
                                     <button type="submit" class="btn btn-primary">Guardar</button>

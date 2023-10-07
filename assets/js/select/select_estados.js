@@ -8,12 +8,12 @@ $(document).ready(function(){
         }
     }
 
-    $('#estado').html(estados);
+    $("[name='estSal']").html(estados);
 
     // Al detectar
-    $( "#estado" ).change(function() {
+    $("[name='estSal']" ).change(function() {
         var html = "<option value='' disabled selected>Selecciona el municipio</option>";
-        $( "#estado option:selected" ).each(function() {
+        $( "[name='estSal'] option:selected" ).each(function() {
             var estado = $(this).text();
             if(estado != "Selecciona el estado"){
                 var municipio = municipios[estado];
@@ -21,7 +21,7 @@ $(document).ready(function(){
                     html += "<option value='" + municipio[i] + "'>" + municipio[i] + "</option>";
             }
         });
-        $('#municipio').html(html);
+        $("[name='MunSal__']").html(html);
         $('select').material_select('update');
     })
     .trigger( "change" );

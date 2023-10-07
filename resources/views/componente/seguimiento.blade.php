@@ -10,17 +10,19 @@
                 <h6>Order ID: {{ $paquete->clave_rastreo }}</h6>
                 <article class="card">
                     <div class="card-body row">
-                        <div class="col"> <strong>Fecha estimada de entrega:</strong> <br>29 nov 2019 </div>
+                        <div class="col"> <strong>Fecha estimada de entrega:</strong> <br>{{ $paquete->fecha_estimada_llegada }} </div>
                         <div class="col"> <strong>Status:</strong> <br> {{ $evento->first()->descripcion_evento }} </div>
 
                     </div>
                 </article>
                 <div class="track">
+                   
                     @foreach ($eventosPred as $ep)
+                    
                         @php
                             // Buscar el evento correspondiente al número de evento actual
                             $eventoInfo = $evento->where('numero_evento', $ep->id)->first();
-                            $isActive = ($eventoInfo && $eventoInfo->numero_evento <= $evento->max('numero_evento'));
+                            $isActive = ($ep->id <= $evento->max('numero_evento'));
                         @endphp
                         <div class="step {{ $isActive ? 'active' : '' }}">
                             <span class="icon">

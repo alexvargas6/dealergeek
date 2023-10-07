@@ -4,12 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\models\Permiso;
+use App\models\PermisoUsuario;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\JsonResponse;
 use Validator;
 
 class PermisosController extends Controller
 {
+    public function obtenerPermisosUsuario($id)
+    {
+        // Lógica para obtener los permisos del usuario con el ID proporcionado
+        $permisosUsuario = PermisoUsuario::where('user_id', $id)
+            ->where('estatus', 'A')
+            ->get();
+
+        // Devolver los permisos del usuario en formato JSON
+        return new JsonResponse($permisosUsuario, 200);
+    }
     public function store(Request $request)
     {
         $rules = [

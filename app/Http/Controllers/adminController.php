@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class adminController extends Controller
 {
@@ -18,7 +19,10 @@ class adminController extends Controller
 
     public function panelAdm()
     {
-        return view('admin.pri.panelAdmin.principal');
+        $usuarios = User::all();
+        return view('admin.pri.panelAdmin.principal', [
+            'usuarios' => $usuarios,
+        ]);
     }
 
     /**

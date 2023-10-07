@@ -85,11 +85,36 @@ class seguimientoController extends Controller
      */
     public function show($id)
     {
+        $eventosPredeterminados = [1, 2, 3, 4];
         if ($id === null) {
             return redirect()->route('principal'); // Redirecciona a la ruta con nombre "principal"
         }
         $paquete = Paquete::where('clave_rastreo', $id)->first();
-        return view('componente.seguimiento', ['paquete' => $paquete]);
+        if ($paquete == null) {
+            return redirect()->route('principal');
+        }
+
+        $eventosPred = EventoPredeterminado::whereIn(
+            'id',
+            $eventosPredeterminados
+        )->get();
+        if ($eventosPred->isEmpty()) {
+            return redirect()->route('principal');
+        }
+
+        $evento = Evento::where('idpaquete', $paquete->id)
+            ->orderBy('unixtime', 'desc')
+            ->get();
+
+        if ($evento == null) {
+            return redirect()->route('principal');
+        }
+        $paquete = Paquete::where('clave_rastreo', $id)->first();
+        return view('componente.seguimiento', [
+            'paquete' => $paquete,
+            'evento' => $evento,
+            'eventosPred' => $eventosPred,
+        ]);
     }
 
     /**
@@ -124,5 +149,27 @@ class seguimientoController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function ultimoEvento($id)
+    {
+        $eventosPredeterminados = [1, 2, 3, 4];
+        $eventosPred = EventoPredeterminado::whereIn(
+            'id',
+            $eventosPredeterminados
+        )->get();
+
+        $ultimoEvento = Evento::where('idpaquete', $id)
+            ->orderBy('unixtime', 'desc')
+            ->select('numero_evento')
+            ->first();
+
+        // Crear un array asociativo con los resultados
+        $response = [
+            'eventosPredeterminados' => $eventosPred,
+            'ultimoEvento' => $ultimoEvento,
+        ];
+
+        return response()->json($response);
     }
 }

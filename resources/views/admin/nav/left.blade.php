@@ -7,11 +7,20 @@
                 <li>
                     <a href="{{ route('showPaquetes') }}"><i class="menu-icon fa fa-calendar"></i>Paquetes</a>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="{{ route('admin.panel') }}"><i class="menu-icon fa fa-user"></i>Panel del administrador</a>
-                </li>
+                </li>-->
+                <li>
+                    <a href="{{ route('logout') }}"
+                    onclick="event.preventDefault();
+                         document.getElementById('logout-form').submit();"><i class="menu-icon fa fa-ban"></i>Logout</a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>  
+            </li>
+               
             </ul>
-         
+
         </div>
     </nav>
 </aside>

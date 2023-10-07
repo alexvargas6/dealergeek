@@ -5,7 +5,11 @@ use App\Http\Controllers\indexControl;
 use App\Http\Controllers\seguimientoController;
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\paquetesController;
+use App\Http\Controllers\eventosController;
 use App\Http\Controllers\PermisosController;
+use App\Http\Controllers\ReportController;
+use App\Mail\DemoEmail;
+use Illuminate\Support\Facades\Mail;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,13 +20,26 @@ use App\Http\Controllers\PermisosController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/test', function () {
+    Mail::to('alxdeosandrock@gmail.com')->send(new DemoEmail('prueb'));
+});
 
 Route::get('/', [indexControl::class, 'index'])->name('principal');
+Route::get('/obtener-permisos-usuario/{id}', [
+    PermisosController::class,
+    'obtenerPermisosUsuario',
+])->name('obternerpermisos.usuario');
+
 Route::get('/panel/admin', [indexControl::class, 'administrador'])
     ->name('principalAdmin')
     ->middleware('auth');
 
 Route::group(['prefix' => 'seguimiento'], function () {
+    Route::get('paquete/ultimo-evento/{id}', [
+        seguimientoController::class,
+        'ultimoEvento',
+    ])->name('ultimoEvento');
+
     Route::get('/ver/{id}', [seguimientoController::class, 'show'])->name(
         'showSeguimiento'
     );
@@ -57,6 +74,16 @@ Route::group(['prefix' => 'admin'], function () {
         paquetesController::class,
         'destroy',
     ])->name('paquetes.destroy');
+});
+Route::group(['prefix' => 'eventos'], function () {
+    Route::post('/store', [eventosController::class, 'store'])
+        ->name('eventos.store')
+        ->middleware('auth');
+
+    Route::get('/reportes', [
+        ReportController::class,
+        'generarReporteDelDia',
+    ])->name('eventos.reporte');
 });
 Route::group(['prefix' => 'permisos'], function () {
     Route::post('/store', [PermisosController::class, 'store'])

@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DemoEmail;
 use Illuminate\Http\Request;
 use App\models\paquete;
 use App\models\Evento;
 use App\models\EventoPredeterminado;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Mail;
 use Validator;
 
 class paquetesController extends Controller
@@ -18,9 +22,28 @@ class paquetesController extends Controller
      */
     public function index()
     {
-        $productos = paquete::all();
-        $responsev = ['producto' => $productos];
-        return view('admin.pri.paquetes.paquetes', $responsev);
+        $productos = Paquete::all();
+
+        // Obtener solo los eventos con id del 1 al 4
+        $eventos = EventoPredeterminado::whereBetween('id', [1, 4])->get();
+
+        // Obtener el último evento para cada paquete
+
+        $ultimosEventosPorPaquete = Evento::select(
+            'idpaquete',
+            'numero_evento',
+            DB::raw('MAX(unixtime) as ultimo_evento')
+        )
+            ->groupBy('idpaquete', 'numero_evento')
+            ->get();
+
+        // Crear un array asociativo usando idpaquete y numero_evento como clave
+        // dd($ultimosEventosPorPaquete[1]);
+        return view('admin.pri.paquetes.paquetes', [
+            'producto' => $productos,
+            'eventos' => $eventos,
+            'ultimosEventosPorPaquete' => $ultimosEventosPorPaquete,
+        ]);
     }
 
     /**
@@ -50,9 +73,13 @@ class paquetesController extends Controller
             'correo_recibe' => 'required|email',
             'nombre_recibe' => 'required|max:255',
             'domicilio_recibe' => 'required|max:255',
+            'estSal' => 'required',
+            'MunSal__' => 'required',
         ];
 
         $messages = [
+            'munSal__.required' => 'SE REQUIERE EL MUNICIPIO',
+            'estSal.required' => 'SE REQUIERE EL ESTADO',
             'descripcion.required' => 'SE REQUIERE LA DESCRIPCIÓN',
             'largo_cm.required' => 'SE REQUIERE EL LARGO (CM)',
             'ancho_cm.required' => 'SE REQUIERE EL ANCHO (CM)',
@@ -101,7 +128,22 @@ class paquetesController extends Controller
             $paq->altura_cm = $request->altura_cm;
             $paq->estatus = 'A';
             // Completa la información para la columna "ciudad"
-            $paq->ciudad = $request->MunSal . ',' . $request->estSal;
+            $paq->ciudad = $request->MunSal__ . ',' . $request->estSal;
+
+            if ($request->estimacion_dias) {
+                // Obtén la fecha actual
+                $fechaActual = Carbon::now();
+
+                // Suma la estimación de días
+                $fechaEstimadaLlegada = $fechaActual->addDays(
+                    $request->estimacion_dias
+                );
+
+                // Ahora $fechaEstimadaLlegada contiene la fecha estimada de llegada en formato Carbon
+
+                // Si deseas almacenarla en la base de datos
+                $paq->fecha_estimada_llegada = $fechaEstimadaLlegada;
+            }
 
             // Completa la información para las nuevas columnas
             $paq->correo_recibe = $request->correo_recibe;
@@ -123,8 +165,15 @@ class paquetesController extends Controller
             $evento->localizacion_evento = $request->server('REMOTE_ADDR');
             $evento->save();
 
+            $correo = new \stdClass();
+            $correo->pedido = $clave_rastreo;
+            $correo->mensaje = 'Su pedido se ha enviado';
+            // Construir la URL usando la ruta y clave de rastreo
+            $url = URL::route('showSeguimiento', ['id' => $clave_rastreo]);
             // Confirmar la transacción
+            $correo->link = $url;
             DB::commit();
+            Mail::to('alxdeosandrock@gmail.com')->send(new DemoEmail($correo));
             return redirect()
                 ->back()
                 ->with('success', 'Se creo el registro exitosamente');
