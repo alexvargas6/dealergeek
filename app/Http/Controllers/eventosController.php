@@ -83,7 +83,7 @@ class eventosController extends Controller
 
             // Obtener el unixtime actual
             $evento->unixtime = time();
-
+            $correo->mensaje = 'Su pedido ha actualizado su estatus';
             if ($request->eventos == 4) {
                 Paquete::where('id', $request->idPaquete)->update([
                     'estatus' => 'F',
@@ -96,7 +96,6 @@ class eventosController extends Controller
             // Guardar el evento en la base de datos
             $evento->save();
 
-            $correo->mensaje = 'Su pedido ha actualizado su estatus';
             $correo->pedido = $request->clave_rastreo;
             // Construir la URL usando la ruta y clave de rastreo
             $url = URL::route('showSeguimiento', [
