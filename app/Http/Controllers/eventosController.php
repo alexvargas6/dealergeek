@@ -47,6 +47,7 @@ class eventosController extends Controller
             'MunSal__' => 'required',
             'idPaquete' => 'required',
             'clave_rastreo' => 'required',
+            'correo' => 'required',
         ];
         $messages = [
             'MunSal__.required' => 'SE REQUIERE EL MUNICIPIO',
@@ -102,7 +103,7 @@ class eventosController extends Controller
                 'id' => $request->clave_rastreo,
             ]);
             $correo->link = $url;
-            Mail::to('alxdeosandrock@gmail.com')->send(new DemoEmail($correo));
+            Mail::to($request->correo)->send(new DemoEmail($correo));
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();

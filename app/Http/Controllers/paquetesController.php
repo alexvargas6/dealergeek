@@ -172,8 +172,9 @@ class paquetesController extends Controller
             $url = URL::route('showSeguimiento', ['id' => $clave_rastreo]);
             // Confirmar la transacción
             $correo->link = $url;
+            Mail::to($request->correo_recibe)->send(new DemoEmail($correo));
+
             DB::commit();
-            Mail::to('alxdeosandrock@gmail.com')->send(new DemoEmail($correo));
             return redirect()
                 ->back()
                 ->with('success', 'Se creo el registro exitosamente');

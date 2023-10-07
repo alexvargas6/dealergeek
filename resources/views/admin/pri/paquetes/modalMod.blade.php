@@ -56,7 +56,7 @@
                             <div class="col-md-3"><label for="text-input" class="form-control-label">Correo</label>
                             </div>
                             <div class="col-md-9"><input readonly value="{{ $pro->correo_recibe }}" id="text-input"
-                                    class="form-control"></div>
+                                    class="form-control" name="correo"></div>
                         </div>
                         <!-- Nombre de la persona que recibe -->
                         <div class="row form-group">
