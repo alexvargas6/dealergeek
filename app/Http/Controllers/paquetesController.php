@@ -35,6 +35,7 @@ class paquetesController extends Controller
             DB::raw('MAX(unixtime) as ultimo_evento')
         )
             ->groupBy('idpaquete', 'numero_evento')
+            ->orderBy('id', 'ASC')
             ->get();
 
         // Crear un array asociativo usando idpaquete y numero_evento como clave
@@ -158,11 +159,16 @@ class paquetesController extends Controller
             $evento->idpaquete = $paqueteID;
             $evento->numero_evento = 1; // Por defecto 1
             $evento->unixtime = time(); // Tiempo actual UNIX
+
+            $evento->ciudad = 'Mérida';
+            //$request->munSal__; // Ejemplo, reemplaza con la ciudad real
+            $evento->estado = 'Yucatán'; //$request->estSal; // Ejemplo, reemplaza con el estado real
+
             $evento->descripcion_evento = EventoPredeterminado::find(
                 1
             )->nombre_evento; // Obtener la descripción del evento con ID 1
             // Si es posible, obtener la localización desde la petición
-            $evento->localizacion_evento = $request->server('REMOTE_ADDR');
+            $evento->localizacion_evento = 'Mérida, Yucatán'; //$request->server('REMOTE_ADDR');
             $evento->save();
 
             $correo = new \stdClass();
@@ -173,7 +179,7 @@ class paquetesController extends Controller
             // Confirmar la transacción
             $correo->link = $url;
 
-            Mail::to($request->correo_recibe)->send(new DemoEmail($correo));
+            //  Mail::to($request->correo_recibe)->send(new DemoEmail($correo));
 
             DB::commit();
             return redirect()

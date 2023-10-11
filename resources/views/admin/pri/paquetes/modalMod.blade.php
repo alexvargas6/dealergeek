@@ -20,7 +20,7 @@
                             <div class="col-md-9">
 
                               
-                                <select id="select-eventos-{{ $pro->id }}" name="eventos" class="form-control">
+                                <select id="select-eventos-{{ $pro->id }}" name="eventos" class="form-control" onchange="determinarCiudad('{{ $pro->ciudad }}')">
                                     
                                 </select>
 

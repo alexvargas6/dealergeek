@@ -52,7 +52,7 @@ class eventosController extends Controller
         $messages = [
             'MunSal__.required' => 'SE REQUIERE EL MUNICIPIO',
             'estSal.required' => 'SE REQUIERE EL ESTADO',
-            'eventos.required' => 'SE REQUIERE EL ESTATUS',
+            'eventos.required' => 'Se requiere un estatus diferente',
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
@@ -74,8 +74,10 @@ class eventosController extends Controller
             $evento = new Evento();
             $evento->numero_evento = $request->eventos;
             $evento->idpaquete = $request->idPaquete;
+            $evento->ciudad = $request->MunSal__; // Ejemplo, reemplaza con la ciudad real
+            $evento->estado = $request->estSal; // Ejemplo, reemplaza con el estado real
             $evento->localizacion_evento =
-                $request->munSal__ . ', ' . $request->estSal;
+                $request->MunSal__ . ', ' . $request->estSal;
             $evento->descripcion_evento = EventoPredeterminado::where(
                 'id',
                 $request->eventos
@@ -102,7 +104,7 @@ class eventosController extends Controller
                 'id' => $request->clave_rastreo,
             ]);
             $correo->link = $url;
-            Mail::to($request->correo)->send(new DemoEmail($correo));
+            // Mail::to($request->correo)->send(new DemoEmail($correo));
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();

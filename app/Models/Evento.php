@@ -17,6 +17,8 @@ class Evento extends Model
         'unixtime',
         'descripcion_evento',
         'localizacion_evento',
+        'ciudad',
+        'estado',
     ];
 
     // Relación con el paquete

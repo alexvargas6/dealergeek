@@ -1,33 +1,34 @@
 @extends('admin.nav.all')
 @section('cont')
-<div class="breadcrumbs">
-    <div class="breadcrumbs-inner">
-        <div class="row m-0">
-            <div class="col-sm-4">
-                <div class="page-header float-left">
-                    <div class="page-title">
-                        <h1>Paquete</h1>
+    <div class="breadcrumbs">
+        <div class="breadcrumbs-inner">
+            <div class="row m-0">
+                <div class="col-sm-4">
+                    <div class="page-header float-left">
+                        <div class="page-title">
+                            <h1>Paquete</h1>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-sm-8">
-                <div class="page-header float-right">
-                    <div class="page-title">
-                        <ol class="breadcrumb text-right">
-                            <button type="button" class="btn btn-secondary mb-1" data-toggle="modal" data-target="#mediumModal">
-                                Añadir
-                            </button>
-||
-                            <!-- Botón para generar reportes -->
-                            <a href="{{ route('eventos.reporte') }}" class="btn btn-secondary mb-1">Generar Reportes</a>
-                        </ol>
+                <div class="col-sm-8">
+                    <div class="page-header float-right">
+                        <div class="page-title">
+                            <ol class="breadcrumb text-right">
+                                <button type="button" class="btn btn-secondary mb-1" data-toggle="modal"
+                                    data-target="#mediumModal">
+                                    Añadir
+                                </button>
+                                ||
+                                <!-- Botón para generar reportes -->
+                                <a href="{{ route('eventos.reporte') }}" class="btn btn-secondary mb-1">Generar Reportes</a>
+                            </ol>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 
     @include('admin.pri.paquetes.modalAdd')
@@ -137,6 +138,39 @@
         });
     </script>
     <script>
+        function determinarCiudad(ciudad) {
+
+            // Dividir el string en ciudad y estado
+            var ciudadYestado = ciudad.split(',');
+
+            // Asignar a las variables correspondientes
+            var ciudadNombre = ciudadYestado[0]; // Nombre de la ciudad
+            var estadoNombre = ciudadYestado[1]; // Nombre del estado
+
+            // Ejemplo de cómo puedes usar las variables
+            console.log('Nombre de la ciudad: ' + ciudadNombre);
+            console.log('Nombre del estado: ' + estadoNombre);
+
+         //   $('#estado').val(estadoNombre);
+            //  $('#estado').trigger('change');
+
+           // $('#municipio').val(ciudadNombre);
+            //$('#municipio').trigger('change');
+            // Para hacer invisibles los selects
+
+        //    document.getElementById('estado').style.display = 'none';
+          //  document.getElementById('municipio').style.display = 'none';
+
+
+            /* for (var i = 0; i < estadoSelect.options.length; i++) {
+                 if (estadoSelect.options[i].text === estadoNombre) {
+                     estadoSelect.selectedIndex = i;
+                     break;
+                 }
+             }*/
+        }
+
+
         function construirSelect(id) {
             var parametroID = id;
             var url = "{{ route('ultimoEvento', ':id') }}";
@@ -157,9 +191,9 @@
                     // Iterar sobre los eventos predeterminados y crear opciones
                     eventosPred.forEach(function(evento) {
                         var option = document.createElement('option');
-                       
+
                         option.text = evento.nombre_evento;
-                        if (evento.id < ultimoEvento.numero_evento) {
+                        if (evento.id <= ultimoEvento.numero_evento) {
                             option.value = 00;
                             option.disabled = true;
                         } else {
